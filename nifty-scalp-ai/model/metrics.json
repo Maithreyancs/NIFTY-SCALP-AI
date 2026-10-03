@@ -1,0 +1,15 @@
+{
+  "model_name": "HistGradientBoostingClassifier",
+  "timeframe": "5m",
+  "train_samples": 236,
+  "test_samples": 60,
+  "accuracy": 30.0,
+  "precision": 38.66,
+  "recall": 30.0,
+  "f1_score": 24.59,
+  "win_rate": 42.42,
+  "total_evaluated_trades": 60,
+  "trained_at": "2026-10-03 11:41:58",
+  "feature_count": 16,
+  "disclaimer": "Past backtest performance does not guarantee future results. No fabrication."
+}

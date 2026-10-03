@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIFTY SCALP AI — AI-Powered NIFTY 50 Scalping Intelligence</title>
+  <meta name="description" content="Educational AI/ML-based NIFTY 50 scalping prediction and analysis dashboard featuring multi-timeframe confirmation, candlestick pattern recognition, and ATR risk modeling.">
+  
+  <!-- Modern Clean Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    
+    <!-- Top Header Bar -->
+    <header class="top-nav">
+      <div class="brand-section">
+        <div class="brand-logo">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+            <polyline points="16 7 22 7 22 13"></polyline>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>NIFTY SCALP AI</h1>
+          <span class="subtitle">AI-Powered NIFTY 50 Scalping Intelligence</span>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs" id="mainNav">
+        <button class="nav-btn active" data-tab="tab-dashboard" id="btnTabDashboard">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+          Dashboard
+        </button>
+        <button class="nav-btn" data-tab="tab-analysis" id="btnTabAnalysis">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          Analysis
+        </button>
+        <button class="nav-btn" data-tab="tab-backtest" id="btnTabBacktest">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          Backtest
+        </button>
+        <button class="nav-btn" data-tab="tab-portfolio" id="btnTabPortfolio">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"></path><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"></path></svg>
+          Portfolio
+        </button>
+      </nav>
+
+      <!-- Global Controls -->
+      <div class="top-controls">
+        <div class="timeframe-selector" id="tfSelector">
+          <button class="tf-btn" data-tf="1m">1M</button>
+          <button class="tf-btn active" data-tf="5m">5M</button>
+          <button class="tf-btn" data-tf="15m">15M</button>
+        </div>
+
+        <button class="refresh-btn" id="btnRefresh" title="Refresh Live Market Data">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+          <span>Refresh</span>
+        </button>
+
+        <div class="status-indicator" id="liveStatusBadge" title="Data Feed Status">
+          <span class="pulse-dot"></span>
+          <span class="status-text" id="statusSource">Connecting...</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main App Container -->
+    <main class="main-content">
+      
+      <!-- TAB 1: DASHBOARD -->
+      <section class="tab-pane active" id="tab-dashboard">
+        
+        <!-- Top Metrics Row -->
+        <div class="grid-row-hero">
+          
+          <!-- 1. Main Signal Card (Section 20) -->
+          <div class="card card-hero glassmorphism" id="mainSignalCard">
+            <div class="card-header-compact">
+              <span class="card-eyebrow">INSTRUMENT & SIGNAL</span>
+              <span class="badge-timeframe" id="signalTimeframeBadge">5M SCALPING</span>
+            </div>
+            
+            <div class="hero-body">
+              <div class="price-block">
+                <span class="instrument-title">NIFTY 50</span>
+                <div class="price-display">
+                  <span class="curr-symbol">₹</span>
+                  <span class="curr-val" id="heroPrice">--,--</span>
+                </div>
+                <div class="price-sub" id="heroTimestamp">Updated: Just now</div>
+              </div>
+
+              <div class="signal-badge-large" id="heroSignalBadge">
+                <span class="signal-action" id="heroSignalAction">WAIT</span>
+                <div class="signal-meta">
+                  <span class="signal-conf" id="heroConfidence">Confidence --%</span>
+                  <span class="signal-tag" id="heroSignalStrength">Moderate Signal</span>
+                </div>
+              </div>
+
+              <div class="bias-indicator-pill" id="heroBiasPill">
+                <span class="bias-label">Bias:</span>
+                <span class="bias-value" id="heroBiasValue">Neutral</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Trade Plan Card (Section 24 & 14) -->
+          <div class="card card-trade-plan glassmorphism">
+            <div class="card-header-compact">
+              <span class="card-eyebrow">VOLATILITY-AWARE TRADE PLAN</span>
+              <span class="risk-badge" id="tradePlanRR">R : R = 1 : 2.1</span>
+            </div>
+
+            <div class="trade-plan-grid">
+              <div class="plan-item entry-item">
+                <div class="item-label">
+                  <span class="dot dot-blue"></span> Entry Zone
+                </div>
+                <div class="item-val" id="planEntryZone">₹-- – ₹--</div>
+                <div class="item-sub">Calculated via ATR Breakout</div>
+              </div>
+
+              <div class="plan-item sl-item">
+                <div class="item-label">
+                  <span class="dot dot-red"></span> Stop Loss Zone
+                </div>
+                <div class="item-val text-red" id="planSlZone">₹-- – ₹--</div>
+                <div class="item-sub" id="planRiskPts">Risk: -- pts</div>
+              </div>
+
+              <div class="plan-item tp-item">
+                <div class="item-label">
+                  <span class="dot dot-green"></span> Target Zone
+                </div>
+                <div class="item-val text-green" id="planTpZone">₹-- – ₹--</div>
+                <div class="item-sub" id="planRewardPts">Target: -- pts</div>
+              </div>
+            </div>
+
+            <div class="risk-bar-container">
+              <div class="risk-bar-track">
+                <div class="risk-segment" style="width: 32%;">Risk</div>
+                <div class="reward-segment" style="width: 68%;">Reward</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Multi-Timeframe Card (Section 21) -->
+          <div class="card card-mtf glassmorphism">
+            <div class="card-header-compact">
+              <span class="card-eyebrow">MULTI-TIMEFRAME CONFIRMATION</span>
+              <span class="badge-soft" id="mtfFinalBias">Final Bias: Bullish</span>
+            </div>
+
+            <table class="mtf-table">
+              <thead>
+                <tr>
+                  <th>Timeframe</th>
+                  <th>Role</th>
+                  <th>Trend</th>
+                  <th>Signal</th>
+                </tr>
+              </thead>
+              <tbody id="mtfTableBody">
+                <tr>
+                  <td><strong>1M</strong></td>
+                  <td>Scalp Timing</td>
+                  <td><span class="trend-pill trend-bull">Bullish</span></td>
+                  <td><span class="sig-pill sig-buy">BUY</span></td>
+                </tr>
+                <tr>
+                  <td><strong>5M</strong></td>
+                  <td>Primary Trend</td>
+                  <td><span class="trend-pill trend-bull">Bullish</span></td>
+                  <td><span class="sig-pill sig-buy">BUY</span></td>
+                </tr>
+                <tr>
+                  <td><strong>15M</strong></td>
+                  <td>Higher-TF Bias</td>
+                  <td><span class="trend-pill trend-neutral">Neutral</span></td>
+                  <td><span class="sig-pill sig-wait">WAIT</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+        <!-- Middle Chart & Technical Section -->
+        <div class="grid-row-chart">
+          
+          <!-- Interactive Candlestick Chart (Section 26) -->
+          <div class="card card-chart-container glassmorphism">
+            <div class="chart-header">
+              <div class="chart-title-group">
+                <h3>NIFTY 50 Real-Time Scalping Chart</h3>
+                <span class="chart-sub" id="chartTimeframeLabel">5-Minute Candles</span>
+              </div>
+
+              <!-- Indicator Overlays Toggles -->
+              <div class="chart-controls">
+                <label class="toggle-pill">
+                  <input type="checkbox" id="chkEMA9" checked>
+                  <span class="pill-dot color-ema9"></span> EMA 9
+                </label>
+                <label class="toggle-pill">
+                  <input type="checkbox" id="chkEMA21" checked>
+                  <span class="pill-dot color-ema21"></span> EMA 21
+                </label>
+                <label class="toggle-pill">
+                  <input type="checkbox" id="chkVWAP" checked>
+                  <span class="pill-dot color-vwap"></span> VWAP
+                </label>
+                <label class="toggle-pill">
+                  <input type="checkbox" id="chkSR" checked>
+                  <span class="pill-dot color-sr"></span> S / R Levels
+                </label>
+              </div>
+            </div>
+
+            <div class="canvas-chart-wrapper" id="canvasChartWrapper">
+              <canvas id="candleChartCanvas"></canvas>
+              <div class="chart-tooltip" id="chartTooltip"></div>
+            </div>
+
+            <div class="chart-legend-bar">
+              <span class="legend-item"><span class="legend-box bull"></span> Bullish Candle</span>
+              <span class="legend-item"><span class="legend-box bear"></span> Bearish Candle</span>
+              <span class="legend-item"><span class="legend-line color-ema9"></span> EMA 9</span>
+              <span class="legend-item"><span class="legend-line color-ema21"></span> EMA 21</span>
+              <span class="legend-item"><span class="legend-line color-vwap"></span> VWAP</span>
+              <span class="legend-item"><span class="legend-line color-sr"></span> S / R Zones</span>
+            </div>
+          </div>
+
+          <!-- Candlestick & Market Structure Cards -->
+          <div class="side-analysis-stack">
+            
+            <!-- Candlestick Recognition Card (Section 23 & 6) -->
+            <div class="card card-candle-pattern glassmorphism">
+              <div class="card-header-compact">
+                <span class="card-eyebrow">CANDLESTICK PATTERN</span>
+                <span class="badge-soft" id="candleBiasBadge">Pattern Bias</span>
+              </div>
+              
+              <div class="candle-info-body">
+                <div class="pattern-main-name" id="candlePatternName">Bullish Engulfing</div>
+                <div class="pattern-detail-row">
+                  <span>Candle Bias:</span>
+                  <strong id="candlePatternBias">Bullish</strong>
+                </div>
+                <div class="pattern-detail-row">
+                  <span>High / Low Range:</span>
+                  <span id="candleRangeVal">-- pts</span>
+                </div>
+                <div class="pattern-detail-row">
+                  <span>Candle Volume:</span>
+                  <span id="candleVolVal">--</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Market Opening Behaviour Card (Section 8) -->
+            <div class="card card-opening-behaviour glassmorphism">
+              <div class="card-header-compact">
+                <span class="card-eyebrow">MARKET OPENING BEHAVIOUR</span>
+                <span class="badge-soft" id="openingStatusBadge">09:15 IST</span>
+              </div>
+
+              <div class="opening-body">
+                <div class="opening-type" id="openingTypeVal">Flat Opening</div>
+                <div class="opening-stats-grid">
+                  <div>
+                    <span class="stat-lbl">Opening Gap:</span>
+                    <strong id="openingGapVal">+0.00 pts</strong>
+                  </div>
+                  <div>
+                    <span class="stat-lbl">Opening Range:</span>
+                    <strong id="openingRangeVal">-- pts</strong>
+                  </div>
+                  <div>
+                    <span class="stat-lbl">Initial Momentum:</span>
+                    <strong id="openingMomentumVal">Consolidation</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Historical Pattern Similarity (Section 4) -->
+            <div class="card card-hist-similarity glassmorphism">
+              <div class="card-header-compact">
+                <span class="card-eyebrow">HISTORICAL REGIME SIMILARITY</span>
+                <span class="badge-soft" id="histSimilarityPct">Similarity: 72%</span>
+              </div>
+
+              <div class="similarity-body">
+                <div class="similarity-analogue-name" id="histAnalogueName">Bullish Expansion Analogue</div>
+                <p class="similarity-desc" id="histAnalogueDesc">
+                  Current EMA structure, RSI momentum, and volatility closely match recent historical consolidation breakouts.
+                </p>
+                <div class="notice-pill">
+                  Descriptive similarity — NOT guaranteed future prediction.
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Technical Analysis Grid (Section 22) -->
+        <div class="card card-technical-grid glassmorphism">
+          <div class="card-header-compact">
+            <span class="card-eyebrow">TECHNICAL INDICATORS SUMMARY</span>
+            <span class="badge-soft">Point-In-Time Readings</span>
+          </div>
+
+          <div class="tech-indicators-grid">
+            <div class="tech-tile">
+              <span class="tech-name">RSI (14)</span>
+              <span class="tech-val" id="techRsi">54.2</span>
+              <div class="mini-bar-track">
+                <div class="mini-bar-fill" id="techRsiFill" style="width: 54%;"></div>
+              </div>
+              <span class="tech-sub" id="techRsiSub">Balanced Momentum</span>
+            </div>
+
+            <div class="tech-tile">
+              <span class="tech-name">MACD (12, 26, 9)</span>
+              <span class="tech-val" id="techMacd">+4.20</span>
+              <span class="tech-sub" id="techMacdSub">Hist: +1.15</span>
+            </div>
+
+            <div class="tech-tile">
+              <span class="tech-name">EMA 9 / EMA 21</span>
+              <span class="tech-val" id="techEma9">₹--</span>
+              <span class="tech-sub" id="techEma21">EMA 21: ₹--</span>
+            </div>
+
+            <div class="tech-tile">
+              <span class="tech-name">EMA 50</span>
+              <span class="tech-val" id="techEma50">₹--</span>
+              <span class="tech-sub">HTF Baseline</span>
+            </div>
+
+            <div class="tech-tile">
+              <span class="tech-name">VWAP</span>
+              <span class="tech-val" id="techVwap">₹--</span>
+              <span class="tech-sub" id="techVwapSub">Above VWAP</span>
+            </div>
+
+            <div class="tech-tile">
+              <span class="tech-name">ATR (14) Volatility</span>
+              <span class="tech-val" id="techAtr">-- pts</span>
+              <span class="tech-sub" id="techVolRegime">Regime: Normal</span>
+            </div>
+
+            <div class="tech-tile">
+              <span class="tech-name">Volume Ratio</span>
+              <span class="tech-val" id="techVolRatio">1.45x</span>
+              <span class="tech-sub" id="techVolSpike">Average Volume</span>
+            </div>
+
+            <div class="tech-tile">
+              <span class="tech-name">Support & Resistance</span>
+              <span class="tech-val" id="techSR">S: ₹-- | R: ₹--</span>
+              <span class="tech-sub">Dynamic Swing Extrema</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- TAB 2: ANALYSIS & MACRO -->
+      <section class="tab-pane" id="tab-analysis">
+        <div class="analysis-layout">
+          <div class="card glassmorphism">
+            <h3>Fundamental & Macro Context Layer</h3>
+            <p class="section-lead">Authentic macro context monitoring without fabricated values.</p>
+
+            <div class="macro-cards-grid">
+              <div class="macro-tile">
+                <h4>RBI & Monetary Policy</h4>
+                <div class="macro-status" id="macroRbiStatus">Data unavailable (Connect real RBI feed)</div>
+                <p>Monitors Repo rate, CRR, and monetary policy statements for sudden liquidity shocks.</p>
+              </div>
+
+              <div class="macro-tile">
+                <h4>Inflation & Economic Data</h4>
+                <div class="macro-status" id="macroCpiStatus">Data unavailable (Connect real CPI/GDP feed)</div>
+                <p>Tracks CPI inflation and quarterly GDP figures impacting index constituent valuations.</p>
+              </div>
+
+              <div class="macro-tile">
+                <h4>Global Cues & US Influences</h4>
+                <div class="macro-status" id="macroGlobalStatus">Global Cues: Neutral / Feed unavailable</div>
+                <p>Analyzes overnight US market returns (S&P 500/Nasdaq) and dollar index strength.</p>
+              </div>
+
+              <div class="macro-tile">
+                <h4>Market Sentiment & Emotion</h4>
+                <div class="macro-status text-blue" id="macroSentimentVal">Neutral</div>
+                <p id="macroSentimentExpl">Standard intraday participation within normal statistical volatility bounds.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card glassmorphism">
+            <h3>Machine Learning Model Architecture</h3>
+            <div class="ml-info-grid">
+              <div>
+                <strong>Model Type:</strong>
+                <span>Histogram-based Gradient Boosting Classifier</span>
+              </div>
+              <div>
+                <strong>Target Definition:</strong>
+                <span>Scalp direction over next 4 candles scaled by ATR threshold</span>
+              </div>
+              <div>
+                <strong>Validation Strategy:</strong>
+                <span>Strict chronological train/test split. Zero data leakage. No shuffling.</span>
+              </div>
+              <div>
+                <strong>Model Status:</strong>
+                <span id="mlModelStatusLabel">Ready</span>
+              </div>
+            </div>
+
+            <div class="ml-retrain-action">
+              <button class="btn-primary" id="btnRetrainModel">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                Retrain Model Chronologically
+              </button>
+              <span class="retrain-note" id="retrainResultNote">Click to trigger point-in-time model retrain.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: BACKTEST -->
+      <section class="tab-pane" id="tab-backtest">
+        <div class="backtest-layout">
+          
+          <div class="card card-backtest-header glassmorphism">
+            <div class="backtest-controls-bar">
+              <div>
+                <h3>Point-in-Time Historical Scalping Backtest</h3>
+                <p class="section-lead">Simulates trades strictly on historical bars without future look-ahead bias.</p>
+              </div>
+
+              <div class="timeframe-selector" id="backtestTfSelector">
+                <button class="tf-btn" data-tf="1m">1M</button>
+                <button class="tf-btn active" data-tf="5m">5M</button>
+                <button class="tf-btn" data-tf="15m">15M</button>
+              </div>
+            </div>
+
+            <!-- Backtest KPI Grid (Section 25) -->
+            <div class="backtest-kpi-grid">
+              <div class="kpi-card">
+                <span class="kpi-label">Win Rate</span>
+                <span class="kpi-value text-green" id="kpiWinRate">--%</span>
+                <span class="kpi-sub" id="kpiWinsLosses">-- Wins / -- Losses</span>
+              </div>
+
+              <div class="kpi-card">
+                <span class="kpi-label">Model Accuracy</span>
+                <span class="kpi-value text-blue" id="kpiAccuracy">--%</span>
+                <span class="kpi-sub">Out-of-sample Test</span>
+              </div>
+
+              <div class="kpi-card">
+                <span class="kpi-label">Profit Factor</span>
+                <span class="kpi-value" id="kpiProfitFactor">--</span>
+                <span class="kpi-sub">Gross Profit / Loss</span>
+              </div>
+
+              <div class="kpi-card">
+                <span class="kpi-label">Avg Return</span>
+                <span class="kpi-value text-green" id="kpiAvgReturn">--%</span>
+                <span class="kpi-sub">Per Scalp Trade</span>
+              </div>
+
+              <div class="kpi-card">
+                <span class="kpi-label">Max Drawdown</span>
+                <span class="kpi-value text-red" id="kpiMaxDrawdown">--%</span>
+                <span class="kpi-sub">Peak to Valley</span>
+              </div>
+
+              <div class="kpi-card">
+                <span class="kpi-label">Total Trades</span>
+                <span class="kpi-value" id="kpiTotalTrades">--</span>
+                <span class="kpi-sub">Historical Signals</span>
+              </div>
+            </div>
+
+            <!-- Statistical Metrics (Section 12) -->
+            <div class="stats-pills-row">
+              <span class="stat-pill">Precision: <strong id="kpiPrecision">--%</strong></span>
+              <span class="stat-pill">Recall: <strong id="kpiRecall">--%</strong></span>
+              <span class="stat-pill">F1 Score: <strong id="kpiF1">--%</strong></span>
+            </div>
+          </div>
+
+          <!-- Equity Curve Chart -->
+          <div class="card glassmorphism">
+            <h3>Cumulative Equity Growth (Indexed)</h3>
+            <div class="equity-canvas-container">
+              <canvas id="equityChartCanvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Backtest Trade Log Table -->
+          <div class="card glassmorphism">
+            <h3>Recent Simulated Scalp Trades</h3>
+            <div class="table-responsive">
+              <table class="trades-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Signal</th>
+                    <th>Entry Time</th>
+                    <th>Entry Price</th>
+                    <th>Exit Price</th>
+                    <th>Outcome</th>
+                    <th>Return</th>
+                  </tr>
+                </thead>
+                <tbody id="backtestTradeLogBody">
+                  <tr><td colspan="7" class="text-center">Loading backtest trades...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- TAB 4: PORTFOLIO -->
+      <section class="tab-pane" id="tab-portfolio">
+        <div class="portfolio-layout">
+          
+          <!-- Balance Cards (Section 19: Initial Balance ₹0.00) -->
+          <div class="portfolio-hero-grid">
+            <div class="card glassmorphism portfolio-tile">
+              <span class="p-label">Portfolio Balance</span>
+              <div class="p-value" id="portBalance">₹0.00</div>
+              <span class="p-note">Educational paper capital</span>
+            </div>
+
+            <div class="card glassmorphism portfolio-tile">
+              <span class="p-label">Available Balance</span>
+              <div class="p-value" id="portAvailable">₹0.00</div>
+              <span class="p-note">Free intraday margin</span>
+            </div>
+
+            <div class="card glassmorphism portfolio-tile">
+              <span class="p-label">Open Position</span>
+              <div class="p-value" id="portPosition">None</div>
+              <span class="p-note" id="portPosDetails">No active scalps</span>
+            </div>
+
+            <div class="card glassmorphism portfolio-tile">
+              <span class="p-label">Realized P&L</span>
+              <div class="p-value" id="portPnl">₹0.00</div>
+              <span class="p-note">Simulated profit/loss</span>
+            </div>
+          </div>
+
+          <!-- Paper Scalp Execution Simulator -->
+          <div class="card glassmorphism">
+            <div class="card-header-compact">
+              <span class="card-eyebrow">PAPER SCALP SIMULATION ONLY</span>
+              <span class="badge-soft">No Real Money Involved</span>
+            </div>
+
+            <div class="paper-simulator-box">
+              <p>
+                To simulate paper trades, you can initialize virtual demo capital. Initial project balance is strictly <strong>₹0.00</strong>.
+              </p>
+
+              <div class="paper-actions-bar">
+                <button class="btn-outline" id="btnInitDemoFunds">Initialize ₹50,000 Demo Capital</button>
+                <button class="btn-primary btn-success" id="btnExecutePaperBuy">Execute Paper BUY (Current Signal)</button>
+                <button class="btn-primary btn-danger" id="btnExecutePaperSell">Execute Paper SELL (Current Signal)</button>
+                <button class="btn-outline" id="btnClosePaperPos">Close Open Position</button>
+                <button class="btn-outline text-red" id="btnResetPortfolio">Reset to ₹0.00</button>
+              </div>
+
+              <div id="paperAlertMsg" class="paper-alert"></div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Financial Disclaimer Footer (Section 37) -->
+    <footer class="app-footer">
+      <div class="disclaimer-content">
+        <div class="disclaimer-badge">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <strong>FINANCIAL DISCLAIMER & DISCLOSURE</strong>
+        </div>
+        <p>
+          This project is for educational and research purposes only. It does not provide guaranteed trading predictions or financial advice. Past performance and backtest results do not guarantee future results. The application does not execute real trades. All analysis is point-in-time and simulated.
+        </p>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
