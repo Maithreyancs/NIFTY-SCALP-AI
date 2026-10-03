@@ -1,3 +1,19 @@
+# ⚡ NIFTY SCALP AI
+
+> **AI-Powered NIFTY 50 Scalping Intelligence & Quantitative Analysis Dashboard**
+
+<div align="center">
+
+[![🚀 Live Demo](https://img.shields.io/badge/%F0%9F%9A%80%20Live%20Demo-nifty--scalp--ai.onrender.com-success?style=for-the-badge&logo=render&logoColor=white)](https://nifty-scalp-ai.onrender.com)
+[![Render Service](https://img.shields.io/badge/Render-Live%20Deployed-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://nifty-scalp-ai.onrender.com)
+[![Python 3.11](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Flask 3.0](https://img.shields.io/badge/Flask-3.0-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+
+### 🔗 **[👉 Click Here to Open Live Application: nifty-scalp-ai.onrender.com 👈](https://nifty-scalp-ai.onrender.com)**
+
+</div>
+
+---
 
 NIFTY SCALP AI
 AI-Powered NIFTY 50 Scalping Intelligence & Quantitative Analysis Dashboard
